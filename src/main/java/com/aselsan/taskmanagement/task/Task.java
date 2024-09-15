@@ -14,7 +14,7 @@ public class Task implements ITask {
 
 	public Task(int priority) {
 
-		this(priority, 5L);
+		this(priority, 0L);
 	}
 
 	@Override
@@ -35,12 +35,18 @@ public class Task implements ITask {
 			e.printStackTrace();
 		}
 
-		System.out.println(String.format("Task with priority %d has been completed.", priority));
+		System.out.println(String.format("Task with priority %d has been completed after %d ms.", priority, duration));
 	}
 
 	@Override
 	public int compareTo(ITask o) {
 
 		return this.getPriority() > o.getPriority() ? -1 : (this.getPriority() < o.getPriority() ? 1 : 0);
+	}
+
+	@Override
+	public String toString() {
+
+		return priority + "";
 	}
 }

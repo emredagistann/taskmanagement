@@ -6,8 +6,6 @@ public class Node<T extends Comparable<T>> {
 
 	private Node<T> next;
 
-	private Node<T> prev;
-
 	public Node() {
 
 	}
@@ -20,16 +18,6 @@ public class Node<T extends Comparable<T>> {
 	public T getValue() {
 
 		return value;
-	}
-
-	public Node<T> getPrev() {
-
-		return prev;
-	}
-
-	public void setPrev(Node<T> prev) {
-
-		this.prev = prev;
 	}
 
 	public Node<T> getNext() {
