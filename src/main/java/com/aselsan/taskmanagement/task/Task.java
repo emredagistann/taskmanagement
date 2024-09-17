@@ -24,7 +24,7 @@ public class Task implements ITask {
 	}
 
 	@Override
-	public void doTask() {
+	public void simulateTask() {
 
 		try {
 

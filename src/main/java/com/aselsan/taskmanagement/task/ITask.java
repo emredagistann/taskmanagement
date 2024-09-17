@@ -2,7 +2,7 @@ package com.aselsan.taskmanagement.task;
 
 public interface ITask extends Comparable<ITask> {
 
-	void doTask();
+	void simulateTask();
 
 	int getPriority();
 }

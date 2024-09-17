@@ -9,7 +9,9 @@ public class ConcurrentPriorityQueue<T extends Comparable<T>> {
 	// biggest priority value to be low priority (inclusive)
 	private T priorityBorderValue;
 
-	private int size = 0;
+	private int highPrioritySize = 0;
+
+	private int lowPrioritySize = 0;
 
 	private static final Object LOCK = new QueueLock();
 
@@ -36,6 +38,8 @@ public class ConcurrentPriorityQueue<T extends Comparable<T>> {
 					putInOrder(lowPriorityRoot, value, true);
 				}
 
+				lowPrioritySize++;
+
 			} else {
 
 				if (highPriorityRoot == null) {
@@ -46,9 +50,9 @@ public class ConcurrentPriorityQueue<T extends Comparable<T>> {
 
 					putInOrder(highPriorityRoot, value, false);
 				}
-			}
 
-			size++;
+				highPrioritySize++;
+			}
 		}
 	}
 
@@ -57,6 +61,15 @@ public class ConcurrentPriorityQueue<T extends Comparable<T>> {
 		synchronized (getQueueLock()) {
 
 			Node<T> current = highPriorityRoot;
+
+			while (current != null) {
+
+				System.out.print(current.getValue() + ", ");
+
+				current = current.getNext();
+			}
+
+			current = lowPriorityRoot;
 
 			while (current != null) {
 
@@ -115,20 +128,6 @@ public class ConcurrentPriorityQueue<T extends Comparable<T>> {
 		}
 	}
 
-	public void peekHighPriority() {
-
-		synchronized (getQueueLock()) {
-
-		}
-	}
-
-	public void peekLowPriority() {
-
-		synchronized (getQueueLock()) {
-
-		}
-	}
-
 	public T pollHighPriority() {
 
 		synchronized (getQueueLock()) {
@@ -140,7 +139,8 @@ public class ConcurrentPriorityQueue<T extends Comparable<T>> {
 				value = highPriorityRoot.getValue();
 
 				highPriorityRoot = highPriorityRoot.getNext();
-				size--;
+
+				highPrioritySize--;
 			}
 
 			return value;
@@ -153,15 +153,32 @@ public class ConcurrentPriorityQueue<T extends Comparable<T>> {
 
 			T value = null;
 
-			if (highPriorityRoot != null) {
+			if (lowPriorityRoot != null) {
 
-				value = highPriorityRoot.getValue();
+				value = lowPriorityRoot.getValue();
 
-				highPriorityRoot = highPriorityRoot.getNext();
+				lowPriorityRoot = lowPriorityRoot.getNext();
+
+				lowPrioritySize--;
 			}
 
-			size--;
 			return value;
+		}
+	}
+
+	public int getHighPrioritySize() {
+
+		synchronized (getQueueLock()) {
+
+			return highPrioritySize;
+		}
+	}
+
+	public int getLowPrioritySize() {
+
+		synchronized (getQueueLock()) {
+
+			return lowPrioritySize;
 		}
 	}
 
@@ -169,7 +186,7 @@ public class ConcurrentPriorityQueue<T extends Comparable<T>> {
 
 		synchronized (getQueueLock()) {
 
-			return size;
+			return highPrioritySize + lowPrioritySize;
 		}
 	}
 

@@ -12,29 +12,9 @@ public class TaskManager {
 
 	public TaskManager() {
 
-		tasks = new ConcurrentPriorityQueue<ITask>(new Task(-1));
+		tasks = new ConcurrentPriorityQueue<>(new Task(2));
 
 		startGeneratingTasks();
-		startConsumingTasks();
-	}
-
-	private void startConsumingTasks() {
-
-		new Thread(() -> {
-
-			while (true) {
-
-				System.out.println("Task size: " + tasks.getSize());
-
-				ITask task = tasks.pollHighPriority();
-
-				if (task != null) {
-
-					task.doTask();
-				}
-			}
-
-		}, "Task consumer.").start();
 	}
 
 	private void startGeneratingTasks() {
@@ -45,14 +25,14 @@ public class TaskManager {
 
 			while (true) {
 
-				tasks.add(new Task(r.nextInt(6), r.nextLong(101L)));
+				tasks.add(new Task(r.nextInt(6), 450L));
 
 				try {
 
-					Thread.sleep(50L);
+					Thread.sleep(10L);
+
 				} catch (InterruptedException e) {
 
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -60,5 +40,11 @@ public class TaskManager {
 			}
 
 		}, "Task generator.").start();
+
+	}
+
+	public ConcurrentPriorityQueue<ITask> getTasks() {
+
+		return tasks;
 	}
 }
