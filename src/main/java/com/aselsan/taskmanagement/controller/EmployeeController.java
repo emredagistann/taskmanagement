@@ -31,12 +31,26 @@ public class EmployeeController {
 
 		return ResponseEntity.ok("Employees stopped working.");
 	}
+	
+	@GetMapping("/size")
+	public ResponseEntity<String> getSize() {
 
+		return ResponseEntity.ok("Thread pool size: " + employeeService.getWorkerThreadSize());
+	}
+	
 	@GetMapping
 	public ResponseEntity<String> resizeThreadPool(@RequestParam int size) {
 
 		employeeService.resizeWorkers(size);
 
-		return ResponseEntity.ok("Thread pool resized to: " + size);
+		if(size == 0) {
+
+			return ResponseEntity.ok("Thread pool resizing automatically.");
+			
+		} else {
+			
+			return ResponseEntity.ok("Thread pool resized to: " + size);
+		}
+		
 	}
 }

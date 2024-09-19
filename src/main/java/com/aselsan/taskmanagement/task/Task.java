@@ -45,7 +45,7 @@ public class Task implements ITask {
 			e.printStackTrace();
 		}
 
-		System.out.println(String.format("Task with priority %d has been completed after %d ms.", priority, duration));
+//		System.out.println(String.format("Task with priority %d has been completed after %d ms.", priority, duration));
 	}
 
 	@Override

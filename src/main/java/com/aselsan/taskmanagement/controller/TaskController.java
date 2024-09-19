@@ -36,6 +36,12 @@ public class TaskController {
 
 		return ResponseEntity.ok("Task added with priority: " + task.getPriority());
 	}
+	
+	@GetMapping("/size")
+	public ResponseEntity<Integer> getTaskSize() {
+		
+		return ResponseEntity.ok(taskService.getTasks().getSize());
+	}
 
 	@GetMapping
 	public ResponseEntity<String> getTasks() {
