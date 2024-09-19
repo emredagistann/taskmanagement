@@ -45,7 +45,7 @@ public abstract class Employee {
 
 	/**
 	 * 
-	 * Stops and resizes the thread pool. It wont resume if threads already running.
+	 * Stops and resizes the thread pool. It wont resume if threads are already running.
 	 * 
 	 * @param n new Thread Pool size
 	 */
@@ -58,15 +58,18 @@ public abstract class Employee {
 
 	public void startWorking() {
 
-		acceptNewTasks.set(true);
-		prepareThreadPool(threadPoolSize);
-		threadPool.forEach((t) -> {
+		if(!acceptNewTasks.getAndSet(true)) {
+			
+			prepareThreadPool(threadPoolSize);
 
-			if (!t.isAlive()) {
-
-				t.start();
-			}
-		});
+			threadPool.forEach((t) -> {
+				
+				if (!t.isAlive()) {
+					
+					t.start();
+				}
+			});
+		}
 	}
 
 	private void prepareThreadPool(int n) {
